@@ -53,9 +53,9 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 #Tailwind Configuration
-TAILWIND_APP_NAME = 'theme'
-INTERNAL_IPS = ['127.0.0.1']
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+# TAILWIND_APP_NAME = 'theme'
+# INTERNAL_IPS = ['127.0.0.1']
+# NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 #CKEDITOR
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -156,7 +156,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Media files (Profile Picture)
 MEDIA_URL = '/media/'
