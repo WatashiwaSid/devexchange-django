@@ -16,6 +16,8 @@
 Dev Exchange is a dynamic and interactive platform designed for developers to connect, collaborate, and share knowledge. 
 Dev Exchange is inspired by the popular Q&A platform Stack Overflow and aims to provide a vibrant community where developers can ask questions, provide answers, and share insights on a wide range of programming topics.
 
+![home](https://github.com/WatashiwaSid/devexchange-django/blob/1373a39e864173822115d99dfd2971a00919febc/screenshots/dev.png)
+
 ## Table of Content
   * [Introduction](#introduction)
   * [Technologies Used](#technologies-used)
@@ -26,6 +28,7 @@ Dev Exchange is inspired by the popular Q&A platform Stack Overflow and aims to 
   * [Website Screenshots](#website-screenshots)
   * [Admin Screenshots](#admin-screenshots)
   * [Security](#security)
+  * [Contributions](#contributions)
 
 ## Technologies used
 
@@ -72,13 +75,18 @@ pip install -r requirements.txt
 ```python
 python manage.py migrate
 ```
-6. Run the development server:
+6. Create an admin user
+```
+python manage.py createsuperuser
+```
+7. Run the development server:
 ```python
 python manage.py runserver
 ```
 
 ## Tailwind Configuration
 This version of the source code uses Tailwind CSS via the public CDN to render styles. The project also includes a pre-built CSS file, which can be utilized with the load static tag provided by the Jinja templating engine.
+
 
 ### Building Your Own Tailwind Files
 If you wish to customize and build your own Tailwind CSS files, follow these steps:
@@ -108,16 +116,33 @@ python manage.py tailwind build
 
 You can find a reference to setting up tailwind with django at [chaicode docs](https://docs.chaicode.com/tailwind-to-django/).
 
-## Media Configurations
+## Media Configuration
 Put all media files in the */media* folder in the same structure as shown in the following screenshot:
 
-![Imgur](https://imgur.com/xEswHNt).
+![Media](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/media.png).
 
 ## Website Screenshots
 
+![home](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/home.png)
+
+![questions](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/questions.png)
+
+![profile](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/profile.png)
+
+![profileupdate](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/profileupd.png)
+
+![answers](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/answer.png)
+
+![forum](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/forum.png)
 
 
 ## Admin Screenshots
+
+![admin-home](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/adminhome.png)
+
+![admin-users](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/adminusers.png)
+
+![admin-questions](https://github.com/WatashiwaSid/devexchange-django/blob/7c652dc986a15e3340077139ecf8eb4127623a01/screenshots/adminqu.png)
 
 ## Security
 Dev Exchange prioritizes security and follows OWASP standards to protect against common vulnerabilities:
@@ -127,3 +152,15 @@ Dev Exchange prioritizes security and follows OWASP standards to protect against
 - **HTTP Host Header Injection**
 
 Each vulnerability is manually tested and mitigated to ensure the safety and privacy of our users.
+
+## Contributions 
+
+We welcome and appreciate contributions that help improve this repository! Here's how you can get involved:
+
+- **Suggest Improvements**: If you have ideas to make this repository better or want to add new features to this web app, feel free to fork the repository and create a [pull request](https://github.com/WatashiwaSid/devexchange-django/pulls). 
+
+- **Report Issues:** Notice something not working as expected? Open an [issue](https://github.com/WatashiwaSid/devexchange-django/issues) to let us know, and we’ll address it as soon as possible.
+
+- **Read the Guidelines:** Before submitting a [pull request](https://github.com/WatashiwaSid/devexchange-django/pulls), please ensure you’ve read our [Contribution Guidelines](https://github.com/WatashiwaSid/devexchange-django/blob/main/contribution.md) to maintain consistency and quality in the codebase.
+
+- **Stay Connected:** If you like what you see, please star the repository to keep up with the latest updates. Also, follow me on [Linkedin](https://www.linkedin.com/in/comicsid) for more exciting projects and updates!
