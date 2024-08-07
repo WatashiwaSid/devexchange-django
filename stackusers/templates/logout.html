@@ -1,0 +1,45 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Out</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="shortcut icon" type="image/png" href="../../static/favicon.ico" >
+  {% tailwind_css %}
+</head>
+<body>
+  <section>
+    <div class="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center">
+      <div class="mx-auto max-w-xl text-center">
+        <h1 class="text-3xl font-bold sm:text-5xl">
+          Signing Off??<br>
+          <strong class="font-bold text-indigo-500 sm:block"> Take a Break, Not a Goodbye. </strong>
+        </h1>
+  
+        <p class="mt-4 sm:text-xl/relaxed">
+          Thanks for being a part of Dev Exchange! Log out, refresh your mind, and return for more inspiration and collaboration with fellow developers.
+        </p>
+  
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a
+            class="block w-full rounded bg-indigo-500 px-12 py-3 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring active:bg-indigo-700 sm:w-auto"
+            href="{% url "stackbase:home" %}"
+          >
+            Home
+          </a>
+  
+          <a
+            class="block w-full bg-gray-200 rounded px-12 py-3 text-sm font-medium text-black shadow hover:bg-gray-300 focus:outline-none focus:ring active:bg-gray-500 sm:w-auto"
+            href="{% url "login" %}"
+          >
+            Login
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

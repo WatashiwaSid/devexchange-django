@@ -1,0 +1,405 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Exchange - Insights from developers around the globe.</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="../static/favicon.ico" >
+    {% tailwind_css %}
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+      #card{
+        background: linear-gradient(135deg, #667eea, #764ba2);
+      }
+
+      .imgicon{
+        width: 120px;
+        height: 120px;
+        border: 3px solid black;
+        border-radius: 50%;
+      }
+
+    </style>
+</head>
+<body>
+    <div class="bg-white">
+        <header class="absolute inset-x-0 top-0 z-50">
+          <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+            <div class="flex lg:flex-1">
+              <a href="{% url 'stackbase:home' %}" class="-m-1.5 p-1.5">
+                <span class="sr-only">DevExchange</span>
+                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
+              </a>
+            </div>
+            <div class="flex lg:hidden">
+              <button onclick="handleMenuOpen()" type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Open main menu</span>
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
+            </div>
+            <div class="hidden lg:flex lg:gap-x-12">
+              <a href="{% url "about" %}" class="text-sm font-semibold leading-6 text-gray-900">About</a>
+              <a href="{% url "stackbase:questionList" %}" class="text-sm font-semibold leading-6 text-gray-900">Questions</a>
+              <a href="{% url "register" %}" class="text-sm font-semibold leading-6 text-gray-900">Register</a>
+              <a href="https://github.com/WatashiwaSid/devexchange-django" target="_blank" class="text-sm font-semibold leading-6 text-gray-900">Documentation</a>
+            </div>
+            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="text-sm font-semibold leading-6 text-gray-900 mr-4">Profile</a>
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="text-sm font-semibold leading-6 text-gray-900">Logout <span aria-hidden="true">&rarr;</span></button>
+            </form>
+              {% else %}
+              <a href="{% url "login" %}" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+           
+            {% endif %}
+          </div>
+          </nav>
+          <!-- Mobile menu, show/hide based on menu open state. -->
+          <div class="lg:hidden" role="dialog" aria-modal="true" id="mobile-menu">
+            <!-- Background backdrop, show/hide based on slide-over state. -->
+            <div class="fixed inset-0 z-50"></div>
+            <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto  bg-gray-500 backdrop-filter backdrop-blur-sm bg-opacity-60 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+              <div class="flex items-center justify-between">
+                <a href="{% url 'stackbase:home' %}" class="-m-1.5 p-1.5">
+                  <span class="sr-only">DevExchange</span>
+                  <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
+                </a>
+                <button onclick="handleMenuClose()" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+                  <span class="sr-only">Close menu</span>
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div class="mt-6 flow-root">
+                <div class="-my-6 divide-y divide-gray-500/10">
+                  <div class="space-y-2 py-6">
+                    <a href="{% url "about" %}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">About</a>
+                    <a href="{% url "stackbase:questionList" %}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Questions</a>
+                    <a href="{% url "register" %}" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Register</a>
+                    <a href="https://github.com/WatashiwaSid/devexchange-django" target="_blank" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Documentation</a>
+                  </div>
+                  <div class="py-6">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Profile</a>
+                    <form method="POST" action="{% url 'logout' %}" class="inline">
+                      {% csrf_token %}
+                      <button type="submit" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                          Log out
+                      </button>
+                  </form>
+                    {% else %}
+                    <a href="{% url "login" %}" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      
+        <div class="relative isolate px-6 pt-1 lg:px-8">
+          <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+            <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+          </div>
+          <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div class="pb-10 sm:mb-8 sm:flex sm:justify-center">
+              <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+                Built with Django and Tailwind. <a href="{% url "about" %}" class="font-semibold text-indigo-600"><span class="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </div>
+            <div class="text-center">
+              <h1 class="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">Empowering Developers Through Knowledge Exchange</h1>
+              <p class="mt-6 text-lg leading-8 text-gray-600">Unlock solutions with insights from developers around the globe.</p>
+              <div class="mt-10 flex items-center justify-center gap-x-6">
+                <a href="{% url "stackbase:questionList" %}" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get started</a>
+                <a href="{% url "about" %}" class="text-sm font-semibold leading-6 text-gray-900">Learn more <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+            <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white pt-0 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">About DevExchange</h2>
+                <p class="mt-2 text-3xl leading-8 font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Your Go-To Platform for Developer Collaboration
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+                    DevExchange is more than just a Q&A site for programmers. It's a thriving community where developers can connect, share knowledge, and help each other grow.
+                </p>
+            </div>
+    </div>
+
+
+      {% comment %} second-sub-section {% endcomment %}
+     
+<section>
+  <div class="container mx-auto p-6 lg:px-12 lg:py-8 flex justify-center">
+    <div class="bg-indigo-500 text-white rounded-lg shadow-lg p-8 max-w-4xl w-full">
+        <h2 class="text-center text-4xl font-bold mb-4 lg:text-5xl lg:text-center">Collaborate, Create</h2>
+        <p class="text-lg mb-6">
+            At Dev Exchange, we believe that great things happen when developers come together. Our platform is designed to be your ultimate destination for coding, collaboration, and creation. Whether you're a seasoned developer or just starting your journey, you'll find a supportive community ready to help you tackle challenges and turn your ideas into reality.
+        </p>
+        <div class="flex justify-center mb-4">
+          <a href="{% url "stackbase:questionList" %}">
+            <button class="bg-white text-indigo-500 px-6 py-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                Browse Questions
+            </button>
+          </a>
+        </div>
+    </div>
+</div>
+
+</section>
+      
+
+      <!-- Stats Section -->
+      <h2 class="pt-16 text-center text-3xl font-medium leading-7 text-black-900 sm:text-5xl sm:pt-16">
+        People and Problems
+      </h2>
+      <div class="bg-white py-16 sm:py-16">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+            <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+              <dt class="text-base leading-7 text-gray-600">{{ user_count}} active users registered on DevExchange.</dt>
+              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ user_count }} Active Users</dd>
+            </div>
+            <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+                <dt class="text-base leading-7 text-gray-600">Questions on different technologies.</dt>
+                <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Vast Topics</dd>
+              </div>
+            <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+              <dt class="text-base leading-7 text-gray-600">{{ question_count}} totals questions listed on DevExchange.</dt>
+              <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">{{ question_count }} Questions</dd>
+            </div>
+          </dl>
+        </div>
+<br><br><br>
+
+{% comment %} Reviews Section {% endcomment %}
+<div class="relative isolate px-6 pt-1 lg:px-8">
+  <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+    <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+  </div>
+
+  <section class="pt-0">
+    <div class="mx-auto max-w-screen-xl px-4 pt-24 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <h2 class="text-center leading-7 font-medium text-3xl text-black-900 sm:text-5xl">
+        Developer Experiences
+      </h2>
+  
+      <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-8">
+        <!-- Review Block 1 -->
+        <blockquote class="rounded-lg p-6 shadow-sm sm:p-8 border-solid border-2 border-gray-300 hover:border-purple-300">
+          <div class="flex items-center justify-center gap-4">
+          <img alt="profile" src="../media/reviews/siddhant-min.png" class=" imgicon object-cover"/>
+          </div>
+          <div class="flex items-center justify-center gap-4">
+            <div>
+              <p class="mt-0.5 text-lg font-semibold text-gray-900">Siddhant Nautiyal</p>
+              <p class="mt-0.3 text-sm font-medium text-gray-500 px-5">Django Developer</p>
+            </div>
+          </div>
+  
+          <p class="mt-4 text-gray-700">
+            Being a part of Dev Exchange has been a fantastic experience. When I started this project, I never imagined it would turn into a treasure for the community. The forums are filled with knowledgeable professionals who are always willing to help.
+          </p>
+        </blockquote>
+  
+        <!-- Review Block 2 -->
+        <blockquote class="rounded-lg p-6 shadow-sm sm:p-8 border-solid border-2 border-gray-300 hover:border-purple-300">
+          <div class="flex items-center justify-center gap-4">
+            <img alt="profile" src="../media/reviews/manav.jpg" class=" imgicon object-cover"/>
+            </div>
+            <div class="flex items-center justify-center gap-4">
+              <div>
+                <p class="mt-0.5 text-lg font-semibold text-gray-900 px-5">Manav Negi</p>
+                <p class="mt-0.3 text-sm font-medium text-gray-500 px-5">Java Developer</p>
+              </div>
+            </div>
+  
+          <p class="mt-4 text-gray-700">
+            As a self-taught developer, Dev Exchange has been my primary learning resource. The tutorials are easy to follow, and the community support is amazing. I've grown more confident in my skills and connected with like-minded professionals.
+          </p>
+        </blockquote>
+  
+        <!-- Review Block 3 -->
+        <blockquote class="rounded-lg p-6 shadow-sm sm:p-8 border-solid border-2 border-gray-300 hover:border-purple-300">
+          <div class="flex items-center justify-center gap-4">
+            <img alt="profile" src="../media/reviews/udit.jpg" class=" imgicon object-cover"/>
+            </div>
+            <div class="flex items-center justify-center gap-4">
+              <div>
+                <p class="mt-0.5 text-lg font-semibold text-gray-900 px-6">Udit Bhadauria</p>
+                <p class="mt-0.3 text-sm font-medium text-gray-500 px-6">Next.js Developer</p>
+              </div>
+            </div>
+  
+          <p class="mt-4 text-gray-700">
+            The support and resources available at Dev Exchange have been instrumental in my growth as a developer. I appreciate the diverse perspectives and the friendly, collaborative environment.
+          </p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+  
+
+{% comment %} faq section {% endcomment %}
+<h2 class="text-center text-2xl leading-7 font-medium text-black-900 sm:text-5xl pt-10">
+  Frequently Asked Queries
+</h2>
+<div class="space-y-4 pt-10">
+  <details
+    class="group border-s-4 border-black bg-indigo-500 p-6 [&_summary::-webkit-details-marker]:hidden"
+    open
+  >
+    <summary class="flex cursor-pointer items-center justify-between gap-1.5">
+      <h2 class="text-lg font-medium text-white">
+        What is Dev Exchange?
+      </h2>
+
+      <span class="shrink-0 rounded-full bg-white p-1.5 text-gray-900 sm:p-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="size-5 shrink-0 transition duration-300 group-open:-rotate-45"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </span>
+    </summary>
+
+    <p class="mt-4 leading-relaxed text-white">
+      Dev Exchange is a platform designed for developers to share knowledge, ask questions, and connect with peers in the industry. Whether you're a beginner or an experienced coder, Dev Exchange provides resources and a community to help you grow.
+    </p>
+  </details>
+
+  <details
+    class="group border-s-4 border-black bg-indigo-500 p-6 [&_summary::-webkit-details-marker]:hidden"
+  >
+    <summary class="flex cursor-pointer items-center justify-between gap-1.5">
+      <h2 class="text-lg font-medium text-white">
+        Is Dev Exchange free to use?
+      </h2>
+
+      <span class="shrink-0 rounded-full bg-white p-1.5 text-black sm:p-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="size-5 shrink-0 transition duration-300 group-open:-rotate-45"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </span>
+    </summary>
+
+    <p class="mt-4 leading-relaxed text-white">
+      Yes, Dev Exchange is completely free to use as of now. We will introduce premium tiers in future, but the basic tier will be free to use, forever.
+    </p>
+  </details>
+
+  <details
+    class="group border-s-4 border-black bg-indigo-500 p-6 [&_summary::-webkit-details-marker]:hidden"
+  >
+    <summary class="flex cursor-pointer items-center justify-between gap-1.5">
+      <h2 class="text-lg font-medium text-white">
+        How do I get started with DevExchange?
+      </h2>
+
+      <span class="shrink-0 rounded-full bg-white p-1.5 text-black sm:p-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="size-5 shrink-0 transition duration-300 group-open:-rotate-45"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </span>
+    </summary>
+
+    <p class="mt-4 leading-relaxed text-white">
+      Getting started with DevExchange is easy. Simply register for an account, explore the questions, and start contributing. Whether you're a beginner or an experienced developer, DevExchange has something to offer everyone.
+    </p>
+  </details>
+
+  <details
+    class="group border-s-4 border-black bg-indigo-500 p-6 [&_summary::-webkit-details-marker]:hidden"
+  >
+    <summary class="flex cursor-pointer items-center justify-between gap-1.5">
+      <h2 class="text-lg font-medium text-white">
+        How do I ask a question on Dev Exchange?
+      </h2>
+
+      <span class="shrink-0 rounded-full bg-white p-1.5 text-gray-900 sm:p-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="size-5 shrink-0 transition duration-300 group-open:-rotate-45"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </span>
+    </summary>
+
+    <p class="mt-4 leading-relaxed text-white">
+      Once you are logged in, navigate to the "Ask a Question" section, enter your question along with any relevant details or code snippets, and submit it. Our community members will help you with answers and solutions.
+    </p>
+  </details>
+  <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+    <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+</div>
+
+
+{% comment %} Display Message Upon Registration {% endcomment %}
+{% if messages %}
+<script>
+    alert("{% for message in messages %}{{ message }}{% endfor %}");
+</script>
+{% endif %}
+
+
+
+</body>
+<script>
+     function handleMenuOpen() {
+          document.getElementById('mobile-menu').classList.remove('hidden');
+        }
+
+        function handleMenuClose() {
+          document.getElementById('mobile-menu').classList.add('hidden');
+        }
+</script>
+</html>

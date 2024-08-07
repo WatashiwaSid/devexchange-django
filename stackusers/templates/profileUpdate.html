@@ -1,0 +1,46 @@
+{% load static %}
+{% load static tailwind_tags %}
+{% load tailwind_filters %}  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Update</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="../../static/favicon.ico" >
+    {% tailwind_css %}
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins');
+        body {
+            background-color: #ffff;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="flex flex-col md:flex-row p-6 bg-gray-100 min-h-screen">
+        <div class="w-full md:w-1/3 p-4 flex flex-col items-center bg-gradient-to-r from-purple-500 to-indigo-600">
+            <img src="{{ user.profile.image.url }}" alt="User-Profile-Image" class="w-24 h-24 rounded-full mb-4">
+            <h2 class="text-3xl mb-4 font-bold text-white">@{{ user.username }}</h2>
+            <h2 class="text-2xl mb-4 text-white">{{ user.profile.bio|title }}</h2>
+        </div>
+        <div class="w-full md:w-2/3 p-4 bg-white shadow-md">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ usrupdtform|crispy }}
+                {{ profileupdtform|crispy }}
+                <div class="flex space-x-4 mt-4">
+                    <button type="submit" class=" inline-block rounded bg-indigo-600 text-white px-5 py-3 font-medium shadow-md hover:bg-indigo-700">Update Profile</button>
+                    <a href="{% url 'profile' %}" class=" inline-block rounded bg-indigo-600 text-white px-10 py-3 font-medium shadow-md hover:bg-indigo-700">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        feather.replace()
+    </script>
+</body>
+</html>

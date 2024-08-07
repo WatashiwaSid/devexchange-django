@@ -1,0 +1,137 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Questions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="../../static/favicon.ico">
+    {% tailwind_css %}
+    <style>
+        .question-tile {
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <header class="border-b border-gray-200 bg-purple-100 mb-6">
+        <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+            <div class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900 sm:text-3xl lg:text-5xl">Latest Questions</h1>
+                    <p class="mt-1.5 text-sm text-gray-500">
+                        Contribute to the community by helping fellow developers.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="{% url 'stackbase:home' %}">
+                        <button class="inline-flex items-center justify-center gap-1.5 rounded border border-gray-200 bg-purple-500 px-5 py-3 text-white transition hover:text-gray-700 focus:outline-none focus:ring" type="button">
+                            <span class="text-sm font-medium">Home</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </button>
+                    </a>
+
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">
+                        <button class="inline-flex items-center justify-center gap-1.5 rounded border border-gray-200 bg-purple-500 px-5 py-3 text-white transition hover:text-gray-700 focus:outline-none focus:ring" type="button">
+                            <span class="text-sm font-medium">Profile</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </button>
+                    </a>
+
+                    <a href="{% url 'stackbase:questionAsk' %}">
+                        <button class="inline-block rounded bg-indigo-500 px-9 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring" type="button">
+                            Ask
+                        </button>
+                    </a>
+
+                    {% else %}
+                    <a href="{% url 'login' %}">
+                        <button class="inline-block rounded bg-indigo-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring" type="button">
+                            Login
+                        </button>
+                    </a>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Form -->
+        <div class="mx-auto max-w-screen-xl mb-4 px-4 sm:px-6 lg:px-8">
+            <form method="GET" action="" class="flex items-center gap-1">
+                <input type="text" name="search-area" placeholder="Search questions..." value="{{ search_input }}" class="border border-gray-300 rounded px-1 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button class="inline-block rounded bg-indigo-500 px-7 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring" type="submit">
+                    Search
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <div class="space-y-4">
+        {% for question in questions %}
+        <div class="question-tile bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-semibold text-blue-600">
+                <a href="{% url 'stackbase:questionDetail' question.pk %}">{{ question.title }}</a>
+            </h2>
+            <div class="text-gray-700">
+                <!-- Render rich text content safely -->
+                {% if question.content|length > 300 %}
+                <span class="truncated-text">{{ question.content|slice:":300"|safe }}...</span>
+                <a href="{% url 'stackbase:questionDetail' question.pk %}" class="read-more text-indigo-500 cursor-pointer">Read More</a>
+                {% else %}
+                {{ question.content|safe }}
+                {% endif %}
+            </div>
+            <div class="flex justify-between items-center mt-4 text-gray-500 text-sm">
+                <span>Asked By: {{ question.user.username }}</span>
+                <span>On: {{ question.date_created|date:"d M, Y" }}</span>
+            </div>
+        </div>
+        {% empty %}
+        <p>No questions found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="mt-8 mb-8 flex justify-center">
+        <nav class="inline-flex shadow-sm -space-x-px">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&search-area={{ search_input }}" class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" aria-label="Previous">
+                <span>Previous</span>
+            </a>
+            {% else %}
+            <span class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-l-md cursor-not-allowed">
+                <span>Previous</span>
+            </span>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}&search-area={{ search_input }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&search-area={{ search_input }}" class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" aria-label="Next">
+                <span>Next</span>
+            </a>
+            {% else %}
+            <span class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-r-md cursor-not-allowed">
+                <span>Next</span>
+            </span>
+            {% endif %}
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Question - {{ question.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="../../static/favicon.ico" >
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+<div class="container mx-auto p-6">
+    <div class="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <h1 class="text-2xl font-bold mb-4 text-center">Confirm Delete</h1>
+        <p class="text-lg mb-6 text-center">
+            Are you sure you want to delete the question titled <span class="font-semibold">"{{ question.title }}"</span>?
+        </p>
+        <div class="flex justify-center space-x-4">
+            <form method="post" class="inline-block">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Confirm Delete</button>
+            </form>
+            <a href="{% url 'stackbase:questionDetail' question.pk %}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Cancel</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
